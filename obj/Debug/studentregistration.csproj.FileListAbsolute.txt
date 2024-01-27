@@ -1,0 +1,12 @@
+C:\C# _learnings\studentregistration\bin\Debug\studentregistration.exe.config
+C:\C# _learnings\studentregistration\bin\Debug\studentregistration.exe
+C:\C# _learnings\studentregistration\bin\Debug\studentregistration.pdb
+C:\C# _learnings\studentregistration\obj\Debug\studentregistration.csproj.AssemblyReference.cache
+C:\C# _learnings\studentregistration\obj\Debug\studentregistration.Mainform.resources
+C:\C# _learnings\studentregistration\obj\Debug\studentregistration.Properties.Resources.resources
+C:\C# _learnings\studentregistration\obj\Debug\studentregistration.csproj.GenerateResource.cache
+C:\C# _learnings\studentregistration\obj\Debug\studentregistration.csproj.CoreCompileInputs.cache
+C:\C# _learnings\studentregistration\obj\Debug\studentregistration.exe
+C:\C# _learnings\studentregistration\obj\Debug\studentregistration.pdb
+C:\C# _learnings\studentregistration\bin\Debug\AlphaBlendTextBox.dll
+C:\C# _learnings\studentregistration\obj\Debug\studentregistration.csproj.CopyComplete
