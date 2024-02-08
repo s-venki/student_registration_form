@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Windows.Forms.VisualStyles;
+using System.Data.SqlClient;
 
 namespace studentregistration
 {
@@ -241,6 +242,7 @@ namespace studentregistration
            
         }
 
+        
         private void submit_button_Click(object sender, EventArgs e)
         {
             // to check the values in the radiobutton
@@ -256,12 +258,12 @@ namespace studentregistration
                 radiobuttonva = "Female";
 
             }
-
+            int id =GenerateNewStudentId();
 
             dt.Columns["ID"].AutoIncrement = true;
             dt.Columns["ID"].AutoIncrementSeed = 1;
             dt.Columns["ID"].AutoIncrementStep = 1;
-            dt.Rows.Add(null, Nametextbox.Text, mailtextbox.Text,phone_textBox.Text ,radiobuttonva, dateTimePicker.Text,hobbies_textBox.Text ,comboBox1.Text);
+            dt.Rows.Add(id, Nametextbox.Text, mailtextbox.Text,phone_textBox.Text ,radiobuttonva, dateTimePicker.Text,hobbies_textBox.Text ,comboBox1.Text);
 
 
 
@@ -294,6 +296,27 @@ namespace studentregistration
                 MessageBox.Show("Your Form is succesfully registredy ");
 
             }
+            // sql connection
+            
+
+
+
+            SqlConnection con = new SqlConnection(@"Data Source=(localdb)\MSSQLLOCALDB;Initial Catalog=student;Integrated Security=True");
+            con.Open();
+            SqlCommand cmd = new SqlCommand("Insert into student_table values (@Id,@student_name,@email,@mobile_no,@gender,@DOB,@Hobbies,@qualification)",con);
+            dataGridView1.DataSource = dt;
+            cmd.Parameters.AddWithValue("@Id",id);
+            cmd.Parameters.AddWithValue("@student_name",Nametextbox.Text);
+            cmd.Parameters.AddWithValue("@email",mailtextbox.Text);
+            cmd.Parameters.AddWithValue("@mobile_no",phone_textBox.Text);
+            cmd.Parameters.AddWithValue("@gender",radiobuttonva);
+            cmd.Parameters.AddWithValue("@DOB",dateTimePicker.Text);
+            cmd.Parameters.AddWithValue("@Hobbies",hobbies_textBox.Text);
+            cmd.Parameters.AddWithValue("@Qualification",comboBox1.Text);
+            cmd.ExecuteNonQuery();
+            con.Close();
+            
+
 
 
             ///text clear///
@@ -325,10 +348,52 @@ namespace studentregistration
             dt.Columns.Add("Email", Type.GetType("System.String"));
             dt.Columns.Add("MObile number", Type.GetType("System.Int64"));
             dt.Columns.Add("Gender", Type.GetType("System.String"));
-           dt.Columns.Add("DOB", Type.GetType("System.String"));
+            dt.Columns.Add("DOB", Type.GetType("System.String"));
             dt.Columns.Add("Hobbies", Type.GetType("System.String"));
             dt.Columns.Add("Qualifications", Type.GetType("System.String"));
             dataGridView1.DataSource = dt;
+           
+            //sql connection 
+            SqlConnection con = new SqlConnection(@"Data Source=(localdb)\MSSQLLOCALDB;Initial Catalog=student;Integrated Security=True");
+            con.Open();
+            SqlDataAdapter sqlda = new SqlDataAdapter("SELECT * FROM student_table ", con);
+            sqlda.Fill(dt);
+            con.Close();
+
+
+
+        }
+        public int GenerateNewStudentId()
+        {
+            int newId = 0;
+
+            using (SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\MSSQLLOCALDB;Initial Catalog=student;Integrated Security=True"))
+            {
+                string query = "SELECT MAX(id) FROM student_table";
+                SqlCommand command = new SqlCommand(query, connection);
+
+                try
+                {
+                    connection.Open();
+                    object lastIdObj = command.ExecuteScalar();
+
+                    if (lastIdObj != null && lastIdObj != DBNull.Value)
+                    {
+                        newId = (int)lastIdObj;
+                    }
+                    else
+                    {
+                        newId = 0; // Start from 1 if no records exist
+                    }
+                    newId++; // Increment for the new student
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error retrieving last ID: " + ex.Message);
+                }
+            }
+
+            return newId;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
